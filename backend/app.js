@@ -4,6 +4,7 @@ const multer = require("multer");
 const fs = require('fs');
 const csvParser = require("csv-parser");
 const findBestGQR = require('./utils/findbestGQR');
+const connection = require("./db/db")
 
 const app = express();
 const PORT = 3001;
