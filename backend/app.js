@@ -34,7 +34,7 @@ app.get("/submissoes", (req, res) => {
 
 app.get("/submissoes/:id", (req, res) => {
   const id = req.params.id;
-  getDatabyId(id).then(result => res.json(result));
+  getDatabyId(id).then(result => res.json(findBestGQR(result)));
 })
 
 

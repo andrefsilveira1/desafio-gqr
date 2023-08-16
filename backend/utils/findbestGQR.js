@@ -8,8 +8,9 @@ function findBestGQR(arr) {
         return { depth, gqr };
     });
     result.sort((a, b) => a.gqr - b.gqr);
-    const average = calculateAverageValues(result);
     const greatest = result.slice(result.length - 10);
+
+    const average = calculateAverageValues(arr);
     console.log("SORT:", average)
     return greatest
 }
