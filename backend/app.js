@@ -21,21 +21,45 @@ app.get('/process-csv', (req, res) => {
 });
 
 app.post("/upload-csv", upload.single("csv"), (req, res) => {
-    const csvData = [];
-    fs.createReadStream(req.file.path)
-      .pipe(csvParser())
-      .on("data", (data) => csvData.push(data))
-      .on("end", () => {
-        fs.unlinkSync(req.file.path);
-        const result = findBestGQR(csvData);
-        console.log("CSV:", result.sort((a, b) => b.gqr - a.gqr))
-        res.json(csvData);
-      });
+  const csvData = [];
+  fs.createReadStream(req.file.path)
+    .pipe(csvParser())
+    .on("data", (data) => csvData.push(data))
+    .on("end", () => {
+      fs.unlinkSync(req.file.path);
+      const result = findBestGQR(csvData);
+      console.log("CSV:", result.sort((a, b) => b.gqr - a.gqr));
+      const query = `
+    INSERT INTO data (depth, c1, c2, c3, ic4, nc4, ic5, nc5, TotalGas)
+    VALUES ?
+`;
 
-  });
+      const values = csvData.map(obj => [
+        obj.depth,
+        parseFloat(obj.c1),
+        parseFloat(obj.c2),
+        parseFloat(obj.c3),
+        parseFloat(obj.ic4),
+        parseFloat(obj.nc4),
+        parseFloat(obj.ic5),
+        parseFloat(obj.nc5),
+        parseFloat(obj.TotalGas)
+      ]);
+
+      connection.query(query, [values], (err, results) => {
+        if (err) {
+          console.error('Erro na inserção em lote:', err.message);
+        } else {
+          console.log('Inserção em lote bem-sucedida');
+        }
+      });
+      res.json(csvData);
+    });
+
+});
 
 app.get("/", (req, res) => {
-    res.json({msg: "Hello world"});
+  res.json({ msg: "Hello world" });
 })
 
 app.listen(PORT, () => {
