@@ -8,7 +8,6 @@ function calculateGQR(data) {
     5 * (parseFloat(nc5) + 
     parseFloat(ic5)));
     
-    // console.log("gqr:", gqr, TotalGas)
     return gqr;
 }
 
