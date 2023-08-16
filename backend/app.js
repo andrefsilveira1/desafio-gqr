@@ -37,6 +37,7 @@ app.get("/submissoes/:id", (req, res) => {
   getDatabyId(id).then(result => res.json(result));
 })
 
+
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
