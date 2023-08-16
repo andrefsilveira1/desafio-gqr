@@ -26,14 +26,15 @@ export default function SideBar() {
 
   return (
     <div className='side mt-5' style={{ height: '800px', overflowY: 'scroll' }}>
-      <div className="d-flex align-items-center justify-content-center mb-3">
+      <div className="d-flex align-items-center justify-content-center mb-3 flex-column">
         <input
           type="text"
           placeholder="Filtrar por título"
           value={filteredTitle}
           onChange={e => setFilteredTitle(e.target.value)}
-          className=''
+          className='mt-3 mb-2 p-2 rounded'
         />
+        <p>Quantidade de arquivos cadastrados: {filteredCards.length}</p>
       </div>
       <div className="">
         {filteredCards.map((card, index) => (
