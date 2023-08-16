@@ -1,0 +1,26 @@
+.bg-custom-purple {
+    background-color: #1a1c39;
+}
+
+.text-custom-white {
+    color: #ffffff;
+}
+
+.bg-custom-purple:hover {
+    background-color: #ffffff;
+    border: 1px solid #1a1c39;
+    ;
+}
+
+.text-custom-white:hover {
+    color: #1a1c39;
+}
+
+.card {
+    transition: transform 0.2s ease-in-out;
+    width: 400px;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
