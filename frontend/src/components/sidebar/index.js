@@ -25,7 +25,7 @@ export default function SideBar() {
   );
 
   return (
-    <div className='side mt-5' style={{ height: '800px', overflowY: 'scroll' }}>
+    <div className='side mt-5 shadow' style={{ height: '800px', overflowY: 'scroll' }}>
       <div className="d-flex align-items-center justify-content-center mb-3">
         <input
           type="text"
