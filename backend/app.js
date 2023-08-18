@@ -46,7 +46,6 @@ app.post("/upload-csv", upload.single("csv"), (req, res) => {
 
 app.get("/submissoes", (req, res) => {
   getAllSubmissions().then(result => {
-    console.log("RESULT:", result)
     const formatedResult = result.map((sub) => {
       sub.createdAt = format(new Date(sub.createdAt), 'dd/MM/yyyy');;
       return sub;
