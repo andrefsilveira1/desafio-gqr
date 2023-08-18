@@ -1,27 +1,24 @@
-import React, { useState } from 'react';
-import Card from "../card/index"
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Card from '../card/index';
 
 export default function SideBar() {
-  const initialCards = [
-    { title: 'Arquivo teste', date: '15/08/22' },
-    { title: 'Outro dado', date: '15/08/22' },
-    { title: 'Arquivo teste', date: '15/08/22' },
-    { title: 'Ponta negra', date: '15/08/22' },
-    { title: 'Abel Cabral', date: '15/08/22' },
-    { title: 'Sweet', date: '15/08/22' },
-    { title: 'Kraimer', date: '15/08/22' },
-    { title: 'Hadonnis', date: '15/08/22' },
-    { title: 'Russo', date: '15/08/22' },
-    { title: 'Argentino', date: '15/08/22' },
-    { title: 'Fillys', date: '15/08/22' },
-    { title: 'Suanna', date: '15/08/22' },
-    { title: 'Boliche', date: '15/08/22' },
-    { title: 'Cartas', date: '15/08/22' },
-  ];
-
+  const [initialCards, setInitialCards] = useState([]);
   const [filteredTitle, setFilteredTitle] = useState('');
+
+  useEffect(() => {
+    axios.get('http://localhost:3001/submissoes')
+      .then(response => {
+        console.log("RESPONSE:", response.data)
+        setInitialCards(response.data);
+      })
+      .catch(error => {
+        console.error('Erro ao carregar os dados:', error);
+      });
+  }, []);
+
   const filteredCards = initialCards.filter(card =>
-    card.title.toLowerCase().includes(filteredTitle.toLowerCase())
+    card.name.toLowerCase().includes(filteredTitle.toLowerCase())
   );
 
   return (
@@ -38,7 +35,7 @@ export default function SideBar() {
       </div>
       <div className="">
         {filteredCards.map((card, index) => (
-          <Card key={index} title={card.title} date={card.date} className="mb-3" /> 
+          <Card key={index} title={card.name} date={card.createdAt} className="mb-3" />
         ))}
       </div>
     </div>
