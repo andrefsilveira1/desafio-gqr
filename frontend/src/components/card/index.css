@@ -1,25 +1,30 @@
-.bg-custom-purple {
-    background-color: #1a1c39;
-}
-
-.text-custom-white {
-    color: #ffffff;
-}
-
-.bg-custom-purple:hover {
-    background-color: #ffffff;
-    border: 1px solid #1a1c39;
-    ;
-}
-
-.text-custom-white:hover {
-    color: #1a1c39;
-}
-
 .card {
+    border: 5px solid #1a1c39;
     transition: transform 0.2s ease-in-out;
     width: 400px;
 }
+.card-btn {
+    background-color: #1a1c39;
+    color: #ffffff;
+}
+
+.card-btn:hover {
+    background-color: #ffffff;
+    border: 1.5px solid #1a1c39;
+    color: #1a1c39;
+
+}.card-btn-danger {
+    background-color: #ffffff;
+    color: #1a1c39;
+}
+
+.card-btn-danger:hover {
+    background-color: #ffffff;
+    border: 1.5px solid #f80606;
+    color: #1a1c39;
+
+}
+
 
 .card:hover {
     transform: translateY(-5px);
