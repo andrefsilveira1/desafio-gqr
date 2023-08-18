@@ -7,6 +7,7 @@ const { getAllSubmissions, createSubmission } = require("./repositories/submissi
 const {createData, getDatabyId} = require("./repositories/data/index");
 const connection = require("./db/db");
 const cors = require('cors');
+const { format } = require('date-fns');
 
 const app = express();
 app.use(cors());
@@ -21,6 +22,10 @@ try {
 
 // Não permitir o sistema iniciar sem o banco de dados ativo
 
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return format(date, 'dd/MM/yyyy');
+}
 
 app.post("/upload-csv", upload.single("csv"), (req, res) => {
   const name = req.body.name
@@ -40,7 +45,14 @@ app.post("/upload-csv", upload.single("csv"), (req, res) => {
 });
 
 app.get("/submissoes", (req, res) => {
-  getAllSubmissions().then(result => res.json(result));
+  getAllSubmissions().then(result => {
+    console.log("RESULT:", result)
+    const formatedResult = result.map((sub) => {
+      sub.createdAt = format(new Date(sub.createdAt), 'dd/MM/yyyy');;
+      return sub;
+  });
+    res.json(formatedResult)
+  });
 })
 
 app.get("/submissoes/:id", (req, res) => {
