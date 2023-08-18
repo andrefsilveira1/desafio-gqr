@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Card from '../card/index';
+import { BsSearch } from 'react-icons/bs';
+import "./index.css"
+
 
 export default function SideBar() {
   const [initialCards, setInitialCards] = useState([]);
@@ -23,15 +26,19 @@ export default function SideBar() {
 
   return (
     <div className='side mt-5' style={{ height: '800px', overflowY: 'scroll' }}>
-      <div className="d-flex align-items-center justify-content-center mb-3 flex-column">
+      <div className="d-flex align-items-center justify-content-center mb-3">
         <input
           type="text"
           placeholder="Filtrar por título"
           value={filteredTitle}
           onChange={e => setFilteredTitle(e.target.value)}
-          className='mt-3 mb-2 p-2 rounded'
+          className="form-control pr-5" // Adicione um espaçamento à direita para acomodar o ícone
         />
-        <p>Quantidade de arquivos cadastrados: {filteredCards.length}</p>
+        <div className="input-group-append">
+          <span className="input-group-text">
+            <BsSearch size={25} color="gray" />
+          </span>
+        </div>
       </div>
       <div className="">
         {filteredCards.map((card, index) => (
