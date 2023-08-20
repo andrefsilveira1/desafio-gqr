@@ -104,7 +104,7 @@ export default function Registrar() {
                                     Fechar
                                 </button>
                                 <button className="btn custom-detalhar-btn" onClick={() => setShowMessage(false)}>
-                                   <Link to={`/detalhar/${id}`}>Detalhar {id}</Link>
+                                   <Link className="no-text-decoration "to={`/detalhar/${id}`}>Detalhar {id}</Link>
                                 </button>
                             </div>
                         </Modal.Footer>
