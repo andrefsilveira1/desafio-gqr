@@ -5,6 +5,8 @@ import "./index.css";
 import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
+import { Modal } from 'react-bootstrap';
+import { Link } from "react-router-dom";
 
 
 
@@ -12,6 +14,9 @@ export default function Registrar() {
     const [title, setTitle] = useState('');
     const [documentFile, setDocumentFile] = useState('');
     const [validated, setValidated] = useState(false);
+    const [showMessage, setShowMessage] = useState(false);
+    const [messageContent, setMessageContent] = useState('');
+    const [id, setId] = useState('');
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -26,13 +31,17 @@ export default function Registrar() {
 
         axios.post('http://localhost:3001/upload-csv', formData)
             .then(response => {
-                console.log('Resposta do servidor:', response.data);
+                console.log('Resposta do servidor:', response.data.id);
+                setId(response.data.id, () => {
+                    console.log("ID:", id);
+                  });
             })
             .catch(error => {
                 console.error('Erro ao enviar o formulário:', error);
                 toast.error('Erro ao enviar arquivo.');
             });
-            toast.success('Arquivo enviado com sucesso');
+        setMessageContent('Arquivo enviado com sucesso. Deseja visualizar os resultados agora?');
+        setShowMessage(true);
 
     };
 
@@ -87,6 +96,19 @@ export default function Registrar() {
                             Enviar
                         </button>
                     </form>
+                    <Modal show={showMessage} onHide={() => setShowMessage(false)}>
+                        <Modal.Body>{messageContent}</Modal.Body>
+                        <Modal.Footer>
+                            <div className="d-flex">
+                                <button className="btn ml-auto" onClick={() => setShowMessage(false)}>
+                                    Fechar
+                                </button>
+                                <button className="btn custom-detalhar-btn" onClick={() => setShowMessage(false)}>
+                                   <Link to={`/detalhar/${id}`}>Detalhar {id}</Link>
+                                </button>
+                            </div>
+                        </Modal.Footer>
+                    </Modal>
                 </div>
             </div>
         </div>

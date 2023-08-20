@@ -30,6 +30,7 @@ function formatDate(dateString) {
 app.post("/upload-csv", upload.single("csv"), (req, res) => {
   const name = req.body.name
   const csvData = [];
+  let temp;
   fs.createReadStream(req.file.path)
     .pipe(csvParser())
     .on("data", (data) => csvData.push(data))
@@ -38,9 +39,9 @@ app.post("/upload-csv", upload.single("csv"), (req, res) => {
       createSubmission(name)
       .then(id => {
         createData(csvData, id);
+        const result = findBestGQR(csvData);
+        res.json({ id: id, result: result });
       })
-      const result = findBestGQR(csvData);
-      res.json(result);
     });
 });
 
