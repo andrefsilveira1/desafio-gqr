@@ -9,8 +9,8 @@ export default function Card(props) {
                 <small><p>Cadastrado em: {props.date}</p></small>
             </div>
             <div className='d-flex justify-content-between'>
-                <button className="btn btn-danger align-self-start rounded m-2">Excluir</button>
-                <button className="btn btn-primary align-self-end rounded m-2">Detalhar</button>
+                <button className="btn btn-danger btn-sm align-self-start rounded m-2">Excluir</button>
+                <button className="btn custom-detalhar-btn btn-sm align-self-end rounded m-2">Detalhar</button>
             </div>
         </div>
     )
