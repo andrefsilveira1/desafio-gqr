@@ -43,10 +43,24 @@ function getSubmission(id) {
   });
 }
 
+function deleteSubmission(id) {
+  return new Promise((resolve, reject) => {
+    const query = `DELETE FROM submission WHERE id = ? `;
+    connection.query(query, [id], (err, results) => {
+      if (err) {
+        console.error('Erro na inserção:', err.message);
+        reject(err);
+      }
+      resolve(results.insertId);
+    });
+  });
+}
+
 module.exports = {
   getAllSubmissions,
   createSubmission,
-  getSubmission
+  getSubmission,
+  deleteSubmission
 }
 
 // Encerrar a conexão quando não for mais necessária
