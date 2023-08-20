@@ -4,6 +4,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button, Modal } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 export default function Card(props) {
     const [showModal, setShowModal] = useState(false);
@@ -40,7 +41,7 @@ export default function Card(props) {
                 </div>
                 <div className='d-flex justify-content-between'>
                     <button className="btn btn-danger btn-sm align-self-start rounded m-2" onClick={handleShowModal}>Excluir</button>
-                    <button className="btn custom-detalhar-btn btn-sm align-self-end rounded m-2">Detalhar</button>
+                    <button className="btn custom-detalhar-btn btn-sm align-self-end rounded m-2"><Link to={`/detalhar/${props.cardId}`}>Detalhar</Link></button>
                 </div>
 
                 <Modal show={showModal} onHide={handleCloseModal}>
