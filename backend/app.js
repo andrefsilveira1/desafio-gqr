@@ -3,8 +3,8 @@ const multer = require("multer");
 const fs = require('fs');
 const csvParser = require("csv-parser");
 const findBestGQR = require('./utils/findbestGQR');
-const { getAllSubmissions, createSubmission } = require("./repositories/submission/index");
-const {createData, getDatabyId} = require("./repositories/data/index");
+const { getAllSubmissions, createSubmission, deleteSubmission } = require("./repositories/submission/index");
+const {createData, getDatabyId, deleteData} = require("./repositories/data/index");
 const connection = require("./db/db");
 const cors = require('cors');
 const { format } = require('date-fns');
@@ -59,6 +59,22 @@ app.get("/submissoes/:id", (req, res) => {
   getDatabyId(id).then(result => res.json(findBestGQR(result)));
 })
 
+app.delete("/submissoes/:id", (req, res) => {
+  const id = req.params.id;
+  deleteSubmission(id)
+    .then(result => {
+      console.log("Submissão deletado:", id);
+      return deleteData(id);
+    })
+    .then(result => {
+      console.log("Dados excluídos", id);
+      res.sendStatus(200);
+    })
+    .catch(error => {
+      console.error("Erro ao deletar:", error);
+      res.sendStatus(500);
+    });
+});
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
