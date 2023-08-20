@@ -14,7 +14,6 @@ function createData(csvData, id) {
         parseFloat(obj.TotalGas),
         id,
     ]);
-
     connection.query(query, [values], (err) => {
         if (err) {
             console.error('Erro na inserção em lote:', err.message);
