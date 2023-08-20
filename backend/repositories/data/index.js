@@ -36,7 +36,21 @@ function getDatabyId(id) {
     });
 }
 
+function deleteData(id) {
+    return new Promise((resolve, reject) => {
+        const query = `DELETE FROM data WHERE submissionId = ?`;
+        connection.query(query, [id], (err, results) => {
+          if (err) {
+            console.error('Erro na inserção:', err.message);
+            reject(err);
+          }
+          resolve(results.insertId);
+        });
+      });
+}
+
 module.exports = {
     createData,
-    getDatabyId
+    getDatabyId,
+    deleteData,
 };

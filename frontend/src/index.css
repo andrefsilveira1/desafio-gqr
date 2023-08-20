@@ -1,0 +1,9 @@
+.custom-detalhar-btn {
+    background-color: #1a1c39; 
+    border-color: #1a1c39;
+    color: white;
+}
+
+.custom-detalhar-btn:hover {
+    border-color: #1a1c39;
+}
