@@ -1,13 +1,14 @@
 import React from 'react';
-import logo from "./logo.png"
+import logo from "./logo.png";
+import { Link } from 'react-router-dom';
 
 export default function Menu() {
   return (
     <nav className="mb-5 navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top" style={{ height: '80px' }}>
       <div className="container">
-        <a className="navbar-brand" href="/">
+        <Link className="navbar-brand" to="/">
           <img alt="This is the geowellex shape" src={logo}/>
-        </a>
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -22,14 +23,14 @@ export default function Menu() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ml-auto">
             <li className="nav-item">
-              <a className="nav-link" href="#section1">
+              <Link className="nav-link" to="/">
                 Home
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#section2">
+              <Link className="nav-link" to="/registrar">
                 Cadastrar dados
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
