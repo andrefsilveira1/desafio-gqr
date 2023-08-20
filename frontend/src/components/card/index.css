@@ -1,5 +1,5 @@
 .card {
-    border: 5px solid #1a1c39;
+    border: 0.5px solid #1a1c39;
     transition: transform 0.2s ease-in-out;
     width: 400px;
 }

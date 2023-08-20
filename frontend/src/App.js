@@ -1,16 +1,17 @@
-import Content from "./components/content";
-import Menu from "./components/menu";
-import SideBar from "./components/sidebar";
+
 import 'bootstrap/dist/css/bootstrap.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Home from "./pages/home";
+import Registrar from "./pages/registrar";
+
 function App() {
   return (
-    <div className="App">
-      <Menu/>
-      <div className="m-5 mt-5 d-flex main-container">
-        <SideBar/>
-        <Content/>
-      </div>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home/>} />
+        <Route path="/registrar" element={<Registrar/>} />
+      </Routes>
+    </Router>
   );
 }
 
