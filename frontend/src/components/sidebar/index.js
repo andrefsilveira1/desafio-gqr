@@ -10,15 +10,17 @@ export default function SideBar() {
   const [filteredTitle, setFilteredTitle] = useState('');
 
   useEffect(() => {
+    fetchInitialCards();
+}, []);
+
+function fetchInitialCards() {
     axios.get('http://localhost:3001/submissoes')
-      .then(response => {
-        console.log("RESPONSE:", response.data)
-        setInitialCards(response.data);
-      })
-      .catch(error => {
-        console.error('Erro ao carregar os dados:', error);
-      });
-  }, []);
+        .then(response => {
+            console.log("RESPONSE:", response.data);
+            setInitialCards(response.data);
+        })
+        .catch(error => console.error('Erro ao carregar os dados:', error));
+}
 
   const filteredCards = initialCards.filter(card =>
     card.name.toLowerCase().includes(filteredTitle.toLowerCase())
@@ -32,7 +34,7 @@ export default function SideBar() {
           placeholder="Filtrar por título"
           value={filteredTitle}
           onChange={e => setFilteredTitle(e.target.value)}
-          className="form-control pr-5" // Adicione um espaçamento à direita para acomodar o ícone
+          className="form-control pr-5"
         />
         <div className="input-group-append">
           <span className="input-group-text">
@@ -42,7 +44,7 @@ export default function SideBar() {
       </div>
       <div className="">
         {filteredCards.map((card, index) => (
-          <Card key={index} title={card.name} date={card.createdAt} className="mb-3" />
+          <Card key={index} title={card.name} date={card.createdAt} cardId={card.id} fetchInitialCards={fetchInitialCards} className="mb-3" />
         ))}
       </div>
     </div>
