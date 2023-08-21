@@ -54,7 +54,7 @@ export default function Detalhar() {
         });
     }
     getData();
-  }, [id, value]);
+  }, [id]);
 
   return (
     <div className='d-flex flex-column'>
