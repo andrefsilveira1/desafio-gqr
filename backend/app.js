@@ -3,6 +3,7 @@ const multer = require("multer");
 const fs = require('fs');
 const csvParser = require("csv-parser");
 const findBestGQR = require('./utils/findbestGQR');
+const countValues = require('./utils/countRange');
 const { getAllSubmissions, createSubmission, deleteSubmission } = require("./repositories/submission/index");
 const {createData, getDatabyId, deleteData} = require("./repositories/data/index");
 const connection = require("./db/db");
@@ -56,11 +57,19 @@ app.get("/submissoes", (req, res) => {
   });
 })
 
+app.get("/gqr/:id", (req, res) => {
+  const id = req.params.id;
+  getDatabyId(id).then(result => {
+    const data = findBestGQR(result);
+    res.json(countValues(data))
+
+  })
+})
+
 app.get("/submissoes/:id", (req, res) => {
   const id = req.params.id;
   getDatabyId(id).then(result => {
-    console.log("CONSOLE:", console);
-    res.json(findBestGQR(result))
+    res.json(findBestGQR(result, true))
   });
 })
 

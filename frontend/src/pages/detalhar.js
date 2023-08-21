@@ -1,51 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import Menu from "../components/menu/index";
 import SideBar from "../components/sidebar/index";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
+import Lines from '../components/graphics/line';
 
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
-
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'top',
-    },
-    title: {
-      display: true,
-      text: 'Chart.js Line Chart',
-    },
-  },
-};
-
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
+let labels = [];
 export const data = {
   labels,
   datasets: [
     {
-      label: 'Dataset 1',
-      data: labels.map(() => Math.floor(Math.random() * (1000 - 1 + 1) + 1)),
+      label: 'Profundidade',
       borderColor: 'rgb(255, 99, 132)',
       backgroundColor: 'rgba(255, 99, 132, 0.5)',
     },
@@ -53,22 +18,43 @@ export const data = {
 };
 
 export default function Detalhar() {
-  // const { id } = useParams();
+  const { id } = useParams();
+  const [chartData, setChartData] = useState(data);
+  useEffect(() => {
+    function getData() {
+      axios.get(`http://localhost:3001/submissoes/${id}`)
+        .then(response => {
+          const gqrData = response.data.map(data => parseFloat(data.gqr));
+          const depthData = response.data.map(data => data.depth);
+          console.log("GQR:", gqrData)
+          const updatedData = {
+            labels: depthData,
+            datasets: [
+              {
+                label: 'GQR',
+                data: gqrData,
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+              },
+            ],
+          };
+
+          setChartData(updatedData);
+        })
+        .catch(error => {
+          console.log("Algo deu errado:", error);
+        });
+    }
+    getData();
+  }, [id]);
 
   return (
     <div className='d-flex flex-column'>
       <Menu />
       <div className='d-flex m-5'>
         <SideBar />
-        <div className='container-graph row p-5 m-5'> {/* Reduzi a largura para 50% */}
-          <Line
-            options={options}
-            data={data}
-          />
-          <Line
-            options={options}
-            data={data}
-          />
+        <div className='container-graph row p-5 m-5'>
+          <Lines data={chartData} chartId="line-1"/>
         </div>
       </div>
     </div>
