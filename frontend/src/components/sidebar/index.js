@@ -17,7 +17,7 @@ function fetchInitialCards() {
     axios.get('http://localhost:3001/submissoes')
         .then(response => {
             console.log("RESPONSE:", response.data);
-            setInitialCards(response.data);
+            setInitialCards(response.data.reverse());
         })
         .catch(error => console.error('Erro ao carregar os dados:', error));
 }
