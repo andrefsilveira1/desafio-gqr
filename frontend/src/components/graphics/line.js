@@ -31,7 +31,7 @@ export default function Lines(props) {
             },
             title: {
                 display: true,
-                text: 'GQR x Profundidade',
+                text: 'GQR x Profundidade (Top 10)',
             },
         },
         scales: {
