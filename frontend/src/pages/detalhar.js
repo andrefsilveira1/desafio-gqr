@@ -4,6 +4,7 @@ import axios from 'axios';
 import Menu from "../components/menu/index";
 import SideBar from "../components/sidebar/index";
 import Lines from '../components/graphics/line';
+import ContentCard from '../components/content-card';
 
 let labels = [];
 export const data = {
@@ -54,9 +55,16 @@ export default function Detalhar() {
       <div className='d-flex m-5'>
         <SideBar />
         <div className='container-graph row p-5 m-5'>
-          <Lines data={chartData} chartId="line-1"/>
+          <div className='d-flex'>
+            <ContentCard title={"Maior GQR encontrado"} value={"1500"} depth={`(Profundidade: ${6728})`} />
+            <ContentCard title={"Média de GQR"} value={"0.654"} />
+            <ContentCard title={"Desvio padrão"} value={"0.152"} />
+          </div>
+          <Lines data={chartData} chartId="line-1" />
         </div>
+
       </div>
+
     </div>
   );
 }
