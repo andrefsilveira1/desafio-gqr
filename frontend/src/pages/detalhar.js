@@ -21,13 +21,16 @@ export const data = {
 export default function Detalhar() {
   const { id } = useParams();
   const [chartData, setChartData] = useState(data);
+  const [value, setValue] = useState('');
   useEffect(() => {
     function getData() {
       axios.get(`http://localhost:3001/submissoes/${id}`)
         .then(response => {
           const gqrData = response.data.map(data => parseFloat(data.gqr));
           const depthData = response.data.map(data => data.depth);
-          console.log("GQR:", gqrData)
+          console.log("GQR:", gqrData);
+          setValue(response.data.pop());
+          console.log("DATA;", value);
           const updatedData = {
             labels: depthData,
             datasets: [
@@ -47,7 +50,7 @@ export default function Detalhar() {
         });
     }
     getData();
-  }, [id]);
+  }, [id,value]);
 
   return (
     <div className='d-flex flex-column'>
@@ -55,10 +58,10 @@ export default function Detalhar() {
       <div className='d-flex m-5'>
         <SideBar />
         <div className='container-graph row p-5 m-5'>
-          <div className='d-flex'>
-            <ContentCard title={"Maior GQR encontrado"} value={"1500"} depth={`(Profundidade: ${6728})`} />
-            <ContentCard title={"Média de GQR"} value={"0.654"} />
-            <ContentCard title={"Desvio padrão"} value={"0.152"} />
+          <div className='d-flex justify-content-center mx-5'>
+            <ContentCard title={"Maior GQR encontrado"} value={value.gqr} depth={`(Profundidade: ${value.depth})`} icon='analytics'/>
+            <ContentCard title={"Média de GQR"} value={"0.654"} icon='data'/>
+            <ContentCard title={"Desvio padrão"} value={"0.152"} icon='outline' />
           </div>
           <Lines data={chartData} chartId="line-1" />
         </div>
