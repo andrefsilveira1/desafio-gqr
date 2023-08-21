@@ -10,3 +10,6 @@ a {
 a:hover {
     color: #1a1c39;
 }
+.container-graph {
+    width: 60%;
+}
