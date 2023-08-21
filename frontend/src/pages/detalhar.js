@@ -1,20 +1,76 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import Menu from '../components/menu';
-import SideBar from '../components/sidebar';
+import Menu from "../components/menu/index";
+import SideBar from "../components/sidebar/index";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+export const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'top',
+    },
+    title: {
+      display: true,
+      text: 'Chart.js Line Chart',
+    },
+  },
+};
+
+const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+
+export const data = {
+  labels,
+  datasets: [
+    {
+      label: 'Dataset 1',
+      data: labels.map(() => Math.floor(Math.random() * (1000 - 1 + 1) + 1)),
+      borderColor: 'rgb(255, 99, 132)',
+      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+    },
+  ],
+};
 
 export default function Detalhar() {
-    const { id } = useParams();
+  // const { id } = useParams();
 
-    return (
-        <div className='d-flex flex-column'>
-            <Menu />
-            <div className='d-flex m-5'>
-                <SideBar/>
-                <div className='mt-5'>
-                    <h1>DETALHAR {id}</h1>
-                </div>
-            </div>
+  return (
+    <div className='d-flex flex-column'>
+      <Menu />
+      <div className='d-flex m-5'>
+        <SideBar />
+        <div className='container-graph row p-5 m-5'> {/* Reduzi a largura para 50% */}
+          <Line
+            options={options}
+            data={data}
+          />
+          <Line
+            options={options}
+            data={data}
+          />
         </div>
-    );
+      </div>
+    </div>
+  );
 }
