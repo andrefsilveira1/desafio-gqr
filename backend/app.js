@@ -69,7 +69,8 @@ app.get("/gqr/:id", (req, res) => {
 app.get("/submissoes/:id", (req, res) => {
   const id = req.params.id;
   getDatabyId(id).then(result => {
-    res.json(findBestGQR(result, true))
+    const {greatest, average, deviation} = findBestGQR(result, true);
+    res.json({result: greatest, average, deviation})
   });
 })
 
