@@ -62,12 +62,12 @@ export default function Detalhar() {
       const response = await axios.post('http://localhost:3001/exportar/csv/myfile', {
         data: datacsv,
         headers: {
-          Accept: 'application/csv',
-        },
-        
+          "Content-Type": "text/csv",
+        }
       });
 
       console.log('Resposta da requisição:', response.data);
+      window.open(`http://localhost:3001/exportar/csv/myfile`);
     } catch (error) {
       console.error('Erro na requisição:', error);
     }

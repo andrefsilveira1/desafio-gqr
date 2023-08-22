@@ -93,15 +93,27 @@ app.post("/exportar/csv/:name", (req, res) => {
   const { name } = req.params;
   const data = req.body.data;
   const fields = ['depth', 'gqr'];
-  const csv = json2csv(data, {fields});
+  const csv = json2csv(data, { fields });
 
   fs.writeFile("./file-" + name + ".csv", csv, function (err) {
     if (err) throw err;
     console.log('file saved');
-    res.download("./file-" + name + ".csv");
   });
-  
+  res.redirect(`/exportar/csv/:name`);
 });
+
+app.get("/exportar/csv/:name", (req, res) => {
+  const filePath = `${__dirname}/file-myfile.csv`;
+  fs.readFile(filePath, (err, file) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).send('Could not download file');
+    }
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader("Content-Disposition", `inline; filename=${req.params.name}.csv`);
+    res.send(file);
+  });
+})
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
