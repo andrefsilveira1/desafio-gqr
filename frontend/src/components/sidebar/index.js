@@ -11,16 +11,15 @@ export default function SideBar() {
 
   useEffect(() => {
     fetchInitialCards();
-}, []);
+  }, []);
 
-function fetchInitialCards() {
+  function fetchInitialCards() {
     axios.get('http://localhost:3001/submissoes')
-        .then(response => {
-            console.log("RESPONSE:", response.data);
-            setInitialCards(response.data);
-        })
-        .catch(error => console.error('Erro ao carregar os dados:', error));
-}
+      .then(response => {
+        setInitialCards(response.data.reverse());
+      })
+      .catch(error => console.error('Erro ao carregar os dados:', error));
+  }
 
   const filteredCards = initialCards.filter(card =>
     card.name.toLowerCase().includes(filteredTitle.toLowerCase())

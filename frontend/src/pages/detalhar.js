@@ -22,15 +22,20 @@ export default function Detalhar() {
   const { id } = useParams();
   const [chartData, setChartData] = useState(data);
   const [value, setValue] = useState('');
+  const [average, setAverage] = useState('');
+  const [deviation, setDeviation] = useState('');
+  const [datacsv, setDataCsv] = useState('');
   useEffect(() => {
     function getData() {
       axios.get(`http://localhost:3001/submissoes/${id}`)
         .then(response => {
-          const gqrData = response.data.map(data => parseFloat(data.gqr));
-          const depthData = response.data.map(data => data.depth);
-          console.log("GQR:", gqrData);
-          setValue(response.data.pop());
-          console.log("DATA;", value);
+          console.log("RESPOSTA:", response.data.result);
+          const gqrData = response.data.result.map(data => parseFloat(data.gqr));
+          const depthData = response.data.result.map(data => data.depth);
+          setAverage(response.data.average);
+          setDataCsv(response.data.result);
+          setDeviation(response.data.deviation);
+          setValue(response.data.result.pop());
           const updatedData = {
             labels: depthData,
             datasets: [
@@ -50,8 +55,23 @@ export default function Detalhar() {
         });
     }
     getData();
-  }, [id,value]);
+  }, [id]);
 
+  async function exportCSV() {
+    try {
+      const response = await axios.post('http://localhost:3001/exportar/csv/myfile', {
+        data: datacsv,
+        headers: {
+          "Content-Type": "text/csv",
+        }
+      });
+
+      console.log('Resposta da requisição:', response.data);
+      window.open(`http://localhost:3001/exportar/csv/myfile`);
+    } catch (error) {
+      console.error('Erro na requisição:', error);
+    }
+  };
   return (
     <div className='d-flex flex-column'>
       <Menu />
@@ -59,11 +79,14 @@ export default function Detalhar() {
         <SideBar />
         <div className='container-graph row p-5 m-5'>
           <div className='d-flex justify-content-center mx-5'>
-            <ContentCard title={"Maior GQR encontrado"} value={value.gqr} depth={`(Profundidade: ${value.depth})`} icon='analytics'/>
-            <ContentCard title={"Média de GQR"} value={"0.654"} icon='data'/>
-            <ContentCard title={"Desvio padrão"} value={"0.152"} icon='outline' />
+            <ContentCard title={"Maior GQR encontrado"} value={value.gqr} depth={`(Depth: ${value.depth})`} icon='analytics' />
+            <ContentCard title={"Média de GQR"} value={average} icon='data' />
+            <ContentCard title={"Desvio padrão"} value={deviation} icon='outline' />
           </div>
           <Lines data={chartData} chartId="line-1" />
+          <div className='w-70 d-flex justify-content-center mt-5'>
+            <button className='btn btn-success px-5' onClick={() => exportCSV()}>Exportar CSV</button>
+          </div>
         </div>
 
       </div>

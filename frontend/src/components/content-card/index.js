@@ -11,7 +11,7 @@ export default function ContentCard(props) {
                         <div className="row no-gutters align-items-center">
                             <div className="col-8">
                                 <div className="text-xs font-weight-bold text-uppercase mb-1">{props.title}</div>
-                                <div className="h6 mb-0 font-weight-bold text-gray-800">{props.value} <small>{props.depth}</small></div>
+                                <div className="h6 mb-0 font-weight-bold text-gray-800"><small>{props.value}</small> <small>{props.depth}</small></div>
                             </div>
                             <div className="col-4 text-center">
                                 {props.icon === 'data' && <BsFillClipboardDataFill size={45} color="gray" />}

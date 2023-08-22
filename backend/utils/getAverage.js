@@ -1,10 +1,6 @@
-function calculateAverageValues(dataArray) {  
-    const totalGQR = dataArray.reduce((sum, data) => sum + parseFloat(data.gqr), 0);
-    const totalDepth = dataArray.reduce((sum, data) => sum + data.depth, 0);
-    const averageGQR = totalGQR / dataArray.length;
-    const averageDepth = totalDepth / dataArray.length;
-    return { averageGQR, averageDepth };
-  }
+function calculateAverageValues(dataArray) {
+  const total = dataArray.reduce((sum, obj) => sum + (obj.gqr), 0);
+  return total / dataArray.length;
+}
 
 module.exports = calculateAverageValues
-  

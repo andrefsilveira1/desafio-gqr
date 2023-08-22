@@ -1,5 +1,6 @@
 const calculateGQR = require('./calculategqr');
 const calculateAverageValues = require("./getAverage");
+const calculateDeviation = require('./calculateDeviation');
 
 function findBestGQR(arr, limit) {
     const result = arr.map(data => {
@@ -11,8 +12,9 @@ function findBestGQR(arr, limit) {
     let greatest;
     limit ? greatest = result.slice(result.length - 10) : greatest = result
 
-    const average = calculateAverageValues(arr);
-    return greatest
+    const average = calculateAverageValues(greatest);
+    const deviation = calculateDeviation(greatest)
+    return {greatest, average, deviation}
 }
 
 module.exports = findBestGQR
