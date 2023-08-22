@@ -5,7 +5,7 @@ const csvParser = require("csv-parser");
 const findBestGQR = require('./utils/findbestGQR');
 const countValues = require('./utils/countRange');
 const { getAllSubmissions, createSubmission, deleteSubmission } = require("./repositories/submission/index");
-const {createData, getDatabyId, deleteData} = require("./repositories/data/index");
+const { createData, getDatabyId, deleteData } = require("./repositories/data/index");
 const connection = require("./db/db");
 const cors = require('cors');
 const { format } = require('date-fns');
@@ -38,12 +38,11 @@ app.post("/upload-csv", upload.single("csv"), (req, res) => {
     .on("end", () => {
       fs.unlinkSync(req.file.path);
       createSubmission(name)
-      .then(id => {
-        createData(csvData, id);
-        const result = findBestGQR(csvData);
-        console.log("CONSOLE LOG:", result)
-        res.json({ id: id, result: result });
-      })
+        .then(id => {
+          createData(csvData, id);
+          const result = findBestGQR(csvData);
+          res.json({ id: id, result: result });
+        })
     });
 });
 
@@ -52,7 +51,7 @@ app.get("/submissoes", (req, res) => {
     const formatedResult = result.map((sub) => {
       sub.createdAt = format(new Date(sub.createdAt), 'dd/MM/yyyy');;
       return sub;
-  });
+    });
     res.json(formatedResult)
   });
 })
@@ -69,8 +68,8 @@ app.get("/gqr/:id", (req, res) => {
 app.get("/submissoes/:id", (req, res) => {
   const id = req.params.id;
   getDatabyId(id).then(result => {
-    const {greatest, average, deviation} = findBestGQR(result, true);
-    res.json({result: greatest, average, deviation})
+    const { greatest, average, deviation } = findBestGQR(result, true);
+    res.json({ result: greatest, average, deviation })
   });
 })
 

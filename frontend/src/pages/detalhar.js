@@ -28,8 +28,6 @@ export default function Detalhar() {
     function getData() {
       axios.get(`http://localhost:3001/submissoes/${id}`)
         .then(response => {
-          console.log("GQR:", response.data);
-
           const gqrData = response.data.result.map(data => parseFloat(data.gqr));
           const depthData = response.data.result.map(data => data.depth);
           setValue(response.data.result.pop());
