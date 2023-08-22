@@ -5,7 +5,7 @@ const csvParser = require("csv-parser");
 const findBestGQR = require('./utils/findbestGQR');
 const countValues = require('./utils/countRange');
 const { getAllSubmissions, createSubmission, deleteSubmission } = require("./repositories/submission/index");
-const { createData, getDatabyId, deleteData } = require("./repositories/data/index");
+const { createData, getDatabyId, deleteData, getRootData } = require("./repositories/data/index");
 const connection = require("./db/db");
 const cors = require('cors');
 const { format } = require('date-fns');
@@ -24,7 +24,6 @@ try {
 } catch (e) {
   console.log("Something goes wrong:", e)
 }
-
 // Não permitir o sistema iniciar sem o banco de dados ativo
 
 app.post("/upload-csv", upload.single("csv"), (req, res) => {
@@ -54,6 +53,10 @@ app.get("/submissoes", (req, res) => {
   });
 })
 
+app.get("/", (req, res) => {
+  res.json("ok");
+})
+
 app.get("/gqr/:id", (req, res) => {
   const id = req.params.id;
   getDatabyId(id).then(result => {
@@ -67,7 +70,6 @@ app.get("/submissoes/:id", (req, res) => {
   const id = req.params.id;
   getDatabyId(id).then(result => {
     const { greatest, average, deviation } = findBestGQR(result, true);
-    console.log("GREATES:", greatest);
     res.json({ result: greatest, average, deviation })
   });
 })
@@ -114,6 +116,12 @@ app.get("/exportar/csv/:name", (req, res) => {
     res.setHeader("Content-Disposition", `inline; filename=${req.params.name}.csv`);
     res.send(file);
   });
+})
+
+app.get("/data/:depth", (req, res) => {
+  const depth = req.params.depth;
+  getRootData(depth).then(result => console.log("RESULTADO:", result))
+  res.json("OK");
 })
 
 app.listen(PORT, () => {

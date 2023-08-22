@@ -1,0 +1,61 @@
+version: '3.3'
+services:
+  database:
+    image: mysql:latest
+    container_name: mysql_database
+    environment:
+      MYSQL_DATABASE: "geo"
+      MYSQL_USER: "geo-user"
+      MYSQL_PASSWORD: "geo-password"
+      MYSQL_ROOT_PASSWORD: "geo-password"
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  api:
+    image: api
+    hostname: api
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    depends_on:
+      database:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    environment:
+      PORT: "8080"
+      MYSQL_DATABASE: "geo"
+      MYSQL_USER: "geo-user"
+      MYSQL_PASSWORD: "geo-password"
+      MYSQL_ROOT_PASSWORD: "geo-password"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+
+  front-end:
+    image: front-end
+    hostname: front-end
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=api
+

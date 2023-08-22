@@ -48,8 +48,23 @@ function deleteData(id) {
       });
 }
 
+function getRootData(depth) {
+    return new Promise((resolve, reject) => {
+        const query = `SELECT * FROM data WHERE depth = ?`;
+        connection.query(query, [depth], (err, results) => {
+            if (err) {
+                console.error('Erro na seleção:', err.message);
+                reject(err);
+            }
+            console.log("Res:", results)
+            resolve(results);
+        })
+    })
+}
+
 module.exports = {
     createData,
     getDatabyId,
     deleteData,
+    getRootData
 };

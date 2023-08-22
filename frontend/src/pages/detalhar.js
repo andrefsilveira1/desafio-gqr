@@ -5,6 +5,7 @@ import Menu from "../components/menu/index";
 import SideBar from "../components/sidebar/index";
 import Lines from '../components/graphics/line';
 import ContentCard from '../components/content-card';
+import Table from '../components/table';
 
 let labels = [];
 export const data = {
@@ -29,13 +30,13 @@ export default function Detalhar() {
     function getData() {
       axios.get(`http://localhost:3001/submissoes/${id}`)
         .then(response => {
-          console.log("RESPOSTA:", response.data.result);
           const gqrData = response.data.result.map(data => parseFloat(data.gqr));
           const depthData = response.data.result.map(data => data.depth);
           setAverage(response.data.average);
           setDataCsv(response.data.result);
           setDeviation(response.data.deviation);
           setValue(response.data.result.slice(-1)[0]);
+          console.log("RESPOSTA:", value);
           const updatedData = {
             labels: depthData,
             datasets: [
@@ -83,6 +84,9 @@ export default function Detalhar() {
             <ContentCard title={"Desvio padrão"} value={deviation} icon='outline' />
           </div>
           <Lines data={chartData} chartId="line-1" />
+            <div className='mt-5'>
+              <Table />
+            </div>
           <div className='w-70 d-flex justify-content-center mt-5'>
             <button className='btn btn-success px-5' onClick={() => exportCSV()}>Exportar CSV</button>
           </div>
