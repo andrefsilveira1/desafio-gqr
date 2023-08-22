@@ -9,6 +9,10 @@ const { createData, getDatabyId, deleteData } = require("./repositories/data/ind
 const connection = require("./db/db");
 const cors = require('cors');
 const { format } = require('date-fns');
+const exportCSV = require("./utils/convertCSV");
+const bodyParser = require('body-parser');
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+
 
 const app = express();
 app.use(cors());
@@ -88,6 +92,37 @@ app.delete("/submissoes/:id", (req, res) => {
       console.error("Erro ao deletar:", error);
       res.sendStatus(500);
     });
+});
+
+app.use(bodyParser.json());
+app.post("/exportar/csv/:name", (req, res) => {
+  const { name } = req.params;
+  const data = req.body.data;
+  const csvWriter = createCsvWriter({
+    path: `${name}.csv}`,
+    header: [
+      { id: 'depth', title: 'Profundidade' },
+      { id: 'gqr', title: 'GQR' },
+    ],
+  });
+  csvWriter.writeRecords(data)
+    .then(() => {
+      res.download('output.csv', `${name}.csv`, (err) => {
+        if (err) {
+          console.error('Erro ao enviar o arquivo:', err);
+        }
+        fs.unlink('output.csv', (unlinkErr) => {
+          if (unlinkErr) {
+            console.error('Erro ao excluir o arquivo:', unlinkErr);
+          }
+        });
+      });
+    })
+    .catch(error => {
+      console.error('Erro ao escrever CSV:', error);
+      res.status(500).send('Erro ao gerar o arquivo CSV.');
+    });
+
 });
 
 app.listen(PORT, () => {
