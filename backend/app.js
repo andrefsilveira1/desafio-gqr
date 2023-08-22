@@ -9,16 +9,15 @@ const { createData, getDatabyId, deleteData } = require("./repositories/data/ind
 const connection = require("./db/db");
 const cors = require('cors');
 const { format } = require('date-fns');
-const exportCSV = require("./utils/convertCSV");
 const bodyParser = require('body-parser');
-const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const json2csv = require('json2csv').parse;
 
 
 const app = express();
 app.use(cors());
 const PORT = 3001;
 const upload = multer({ dest: "uploads/" });
-app.use('/exports', express.static(process.cwd() + '/exports'))
+
 
 try {
   connection.connect();
@@ -28,15 +27,9 @@ try {
 
 // Não permitir o sistema iniciar sem o banco de dados ativo
 
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  return format(date, 'dd/MM/yyyy');
-}
-
 app.post("/upload-csv", upload.single("csv"), (req, res) => {
   const name = req.body.name
   const csvData = [];
-  let temp;
   fs.createReadStream(req.file.path)
     .pipe(csvParser())
     .on("data", (data) => csvData.push(data))
@@ -99,35 +92,15 @@ app.use(bodyParser.json());
 app.post("/exportar/csv/:name", (req, res) => {
   const { name } = req.params;
   const data = req.body.data;
+  const fields = ['depth', 'gqr'];
+  const csv = json2csv(data, {fields});
 
-  const csvWriter = createCsvWriter({
-    path: 'output.csv',
-    header: [
-      { id: 'depth', title: 'Profundidade' },
-      { id: 'gqr', title: 'GQR' },
-    ],
+  fs.writeFile("./file-" + name + ".csv", csv, function (err) {
+    if (err) throw err;
+    console.log('file saved');
+    res.download("./file-" + name + ".csv");
   });
-
-  csvWriter.writeRecords(data)
-    .then(() => {
-      res.setHeader('Content-Disposition', `attachment; filename="${name}.csv"`);
-      res.setHeader('Content-Type', 'text/csv');
-
-      const fileStream = fs.createReadStream('output.csv');
-      fileStream.pipe(res);
-
-      fileStream.on('end', () => {
-        fs.unlink('output.csv', (unlinkErr) => {
-          if (unlinkErr) {
-            console.error('Erro ao excluir o arquivo:', unlinkErr);
-          }
-        });
-      });
-    })
-    .catch(error => {
-      console.error('Erro ao escrever CSV:', error);
-      res.status(500).send('Erro ao gerar o arquivo CSV.');
-    });
+  
 });
 
 app.listen(PORT, () => {

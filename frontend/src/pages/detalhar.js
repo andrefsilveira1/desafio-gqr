@@ -62,8 +62,9 @@ export default function Detalhar() {
       const response = await axios.post('http://localhost:3001/exportar/csv/myfile', {
         data: datacsv,
         headers: {
-          Accept: 'application/csv'
-        }
+          Accept: 'application/csv',
+        },
+        
       });
 
       console.log('Resposta da requisição:', response.data);
