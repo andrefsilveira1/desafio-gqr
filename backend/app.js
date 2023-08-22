@@ -99,7 +99,7 @@ app.post("/exportar/csv/:name", (req, res) => {
   const { name } = req.params;
   const data = req.body.data;
   const csvWriter = createCsvWriter({
-    path: `${name}.csv}`,
+    path: `output.csv`,
     header: [
       { id: 'depth', title: 'Profundidade' },
       { id: 'gqr', title: 'GQR' },
