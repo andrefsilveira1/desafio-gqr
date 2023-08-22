@@ -35,7 +35,7 @@ export default function Detalhar() {
           setAverage(response.data.average);
           setDataCsv(response.data.result);
           setDeviation(response.data.deviation);
-          setValue(response.data.result.pop());
+          setValue(response.data.result.slice(-1)[0]);
           const updatedData = {
             labels: depthData,
             datasets: [
@@ -66,7 +66,6 @@ export default function Detalhar() {
         }
       });
 
-      console.log('Resposta da requisição:', response.data);
       window.open(`http://localhost:3001/exportar/csv/myfile`);
     } catch (error) {
       console.error('Erro na requisição:', error);
