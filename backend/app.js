@@ -18,6 +18,7 @@ const app = express();
 app.use(cors());
 const PORT = 3001;
 const upload = multer({ dest: "uploads/" });
+app.use('/exports', express.static(process.cwd() + '/exports'))
 
 try {
   connection.connect();
@@ -98,19 +99,24 @@ app.use(bodyParser.json());
 app.post("/exportar/csv/:name", (req, res) => {
   const { name } = req.params;
   const data = req.body.data;
+
   const csvWriter = createCsvWriter({
-    path: `output.csv`,
+    path: 'output.csv',
     header: [
       { id: 'depth', title: 'Profundidade' },
       { id: 'gqr', title: 'GQR' },
     ],
   });
+
   csvWriter.writeRecords(data)
     .then(() => {
-      res.download('output.csv', `${name}.csv`, (err) => {
-        if (err) {
-          console.error('Erro ao enviar o arquivo:', err);
-        }
+      res.setHeader('Content-Disposition', `attachment; filename="${name}.csv"`);
+      res.setHeader('Content-Type', 'text/csv');
+
+      const fileStream = fs.createReadStream('output.csv');
+      fileStream.pipe(res);
+
+      fileStream.on('end', () => {
         fs.unlink('output.csv', (unlinkErr) => {
           if (unlinkErr) {
             console.error('Erro ao excluir o arquivo:', unlinkErr);
@@ -122,7 +128,6 @@ app.post("/exportar/csv/:name", (req, res) => {
       console.error('Erro ao escrever CSV:', error);
       res.status(500).send('Erro ao gerar o arquivo CSV.');
     });
-
 });
 
 app.listen(PORT, () => {
